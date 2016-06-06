@@ -1,0 +1,28 @@
+{
+  "name": "TestProgressBars",
+  "version": "1.0.0",
+  "description": "Test progress bars with dynamic state action controls",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "karma": "^0.13.22",
+    "karma-cli": "^1.0.0",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-karma": "^1.0.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "phantomjs-prebuilt": "^2.1.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lakshmi Kantha A C",
+  "license": "ISC"
+}

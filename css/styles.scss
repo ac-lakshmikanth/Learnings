@@ -1,0 +1,88 @@
+$media_query_point: 801px;
+
+$action_controls_width_xs: 100%;
+$action_controls_select_width_sm: 130px;
+$action_controls_button_width_sm: 80px;
+$action_controls_height_xs: 48px;
+$action_controls_height_sm: 30px;
+
+$main_container_width_xs: 94%;
+$main_container_width_sm: 60%;
+
+$sub_container_margin_xs: 2% 4%;
+$sub_container_margin_sm: 5% 10%;
+
+$progress_bar_height: 50px;
+
+
+.TestProgressBarContainer {
+	width: $main_container_width_xs;
+ 	margin-left: (100-$main_container_width_xs)/2;
+	margin-right: (100-$main_container_width_xs)/2;
+	border: 1px solid grey;
+	margin-top: 15px;
+	padding-bottom: 30px;
+	
+	@media screen and (min-width:$media_query_point) {
+		width: $main_container_width_sm;
+	 	margin-left: (100-$main_container_width_sm)/2;
+		margin-right: (100-$main_container_width_sm)/2;
+		margin-top: 50px;
+	}
+	h1 {
+		text-align: center;
+	}
+}
+
+.ProgressBarDisplayContainer, .ProgressBarActions {
+	margin: $sub_container_margin_xs;
+	@media screen and (min-width:$media_query_point) {
+		margin: $sub_container_margin_sm;
+	}
+}
+
+.ProgressBarDisplay {
+	.divPosition {
+		position:relative;
+		height: $progress_bar_height;
+		margin-bottom: 25px;
+		line-height: $progress_bar_height;
+	}
+	.divProgressBar {
+		margin-bottom: -1px;
+	}
+	.divProgressState {
+		width:100%;
+		margin-bottom: 0px;
+		margin-right: -1px;
+		border: 1px solid rgba(128, 128, 128, 0.38);
+		top:-$progress_bar_height;
+		text-align: center;
+	}
+}
+
+.ProgressBarActions {
+	margin-top: 10px;
+}
+
+.SelectProgressBar {
+	width: $action_controls_width_xs;
+	height: $action_controls_height_xs;
+	margin-bottom: 10px;
+	margin-right: 5px;
+	@media screen and (min-width:$media_query_point) {
+		height: $action_controls_height_sm;
+		width: $action_controls_select_width_sm;	
+	}
+}
+
+.btn {
+	width: $action_controls_width_xs;
+	height: $action_controls_height_xs;
+	margin-bottom: 10px;
+	@media screen and (min-width:$media_query_point) {
+		width: $action_controls_button_width_sm;
+		height: $action_controls_height_sm;
+		margin: 0px 5px;
+	}
+}

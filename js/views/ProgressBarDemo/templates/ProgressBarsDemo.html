@@ -1,0 +1,12 @@
+<div class='ProgressBarDisplayContainer'>
+	 {{#each progressBars}}		
+		<ProgressBarComponent range="{{width}}" color="{{(progressBarValue>100?colors.invalidState:colors.validState)}}" value="{{progressBarValue}}"/>
+	{{/each}}
+</div>		
+<div class='ProgressBarActions'>
+	<SelectComponent OptionsList="{{progressBars}}" DefaultSelected="{{selectedProgressBar}}" />		
+	{{#each progressBarActions}}
+		<ButtonComponent EventHandler="{{buttonEventName}}" EventHandlerParams="{{this}}" buttonName="{{this}}" />
+	{{/each}}
+	<button class='btn' type='button' id='resetBtn'>Reset</button>
+</div>	
