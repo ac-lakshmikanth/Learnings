@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type='text/javascript'>		
+		var dispatcherObject = {
+			callbacks: [],
+			context: [],
+			handleAction: function(action,data) {
+				//console.log(action+' => '+data);
+				for (index in this.callbacks) {
+					//console.log('callback => '+index+' => '+this.context[index]+' => '+this.callbacks[index]);
+					this.callbacks[index].call(this.context[index],action,data);
+				}
+			},
+			registerUpdateCallback: function(fn,context) {
+				this.context[this.context.length] = context;
+				this.callbacks[this.callbacks.length] = fn;
+			}
+		};				
+		
+		var testStore1 = {
+			data:{
+				attr1:0
+			},
+			initialize: function() {
+				dispatcherObject.registerUpdateCallback(this.updateStore,this);
+			},
+			updateStore: function (action,data) {
+				//console.log('testStore#1 => updateStore => '+action);
+				switch(action) {
+					case "ACTION_1": 
+						if(this.isStateChanged(data)){
+							this.updateState(data);
+							view1.updateView();
+							view3.updateView();
+						}
+					break;
+					default: 
+						break;
+				}
+			},
+			isStateChanged: function(data) {
+				return !!data.attr1;
+			},
+			updateState: function(data) {
+				this.data.attr1 += parseInt(data.attr1,10);
+			},
+			getCurrentState: function() {
+				return this.data.attr1;
+			}
+		};		
+		
+		var testStore2 = {
+			data:{
+				attr2:100
+			},
+			initialize: function() {
+				dispatcherObject.registerUpdateCallback(this.updateStore,this);
+			},
+			updateStore: function (action,data) {
+				//console.log('testStore#2 => updateStore => '+action);
+				switch(action) {
+					case "ACTION_2": 
+						if(this.isStateChanged(data)){
+							this.updateState(data);
+							view2.updateView();
+						}
+					break;
+					default: 
+						break;
+				}
+			},
+			isStateChanged: function(data) {
+				return !!data.attr2;
+			},
+			updateState: function(data) {
+				this.data.attr2 += parseInt(data.attr2,10);
+			},
+			getCurrentState: function() {
+				return this.data.attr2;
+			}
+		};
+
+		var view1 = {
+			updateView: function() {
+				console.log('view1 => updateView');
+				document.getElementById('testButton1Text').innerHTML = testStore1.getCurrentState.apply(testStore1);
+			}
+		};	
+		
+		var view2 = {
+			updateView: function() {
+				console.log('view2 => updateView');
+				document.getElementById('testButton2Text').innerHTML  = testStore2.getCurrentState.apply(testStore2);
+			}
+		};	
+		
+		var view3 = {
+			updateView: function() {
+				console.log('view3 => updateView');
+				document.getElementById('testButton3Text').innerHTML = testStore1.getCurrentState.apply(testStore1);
+			}
+		};	
+		
+		testStore1.initialize();
+		testStore2.initialize();		
+	</script>
+</head>
+<body>
+	<input type='button' value='testButton1' onclick='dispatcherObject.handleAction("ACTION_1",{attr1:1})'>
+	<br>
+	<br>
+	<input type='button' value='testButton2' onclick='dispatcherObject.handleAction("ACTION_2",{attr2:1})'>
+	<br><br>
+	VALUE_1: <span id='testButton1Text'>0</span>
+	<br><br>
+	VALUE_2: <span id='testButton2Text'>100</span>
+	<br><br>
+	VALUE_1: <span id='testButton3Text'>0</span>
+</body>
+</html>

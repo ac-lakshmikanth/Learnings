@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="./react-15.0.1.js"></script>
+	<script src="./react-dom-15.0.1.js"></script>
+	<!-- <script src="./angular-1.4.0-beta.5/angular.min.js"></script> -->
+</head>
+<body>
+	<div id='testDiv'></div>	
+	<script type='text/javascript'>	
+		(function() {
+			var MyComponent = React.createClass({
+				displayName: 'MyComponent',
+				render: function render() {
+					return React.createElement('div',{id:'testDiv2'},'TEST DIV ', this.props.testProp);
+				}	
+			});
+			ReactDOM.render(React.createElement(MyComponent,{testProp:'TEST PROPERTY'}), document.getElementById('testDiv'));
+		})();
+	</script>
+
+	<br>
+	<div id='timerDiv'></div>	
+	<script type='text/javascript'>
+		(function(){
+			var MyComponent2 = React.createClass({
+				displayName: 'MyComponent2',
+				getInitialState: function getInitialState() {
+					return {
+						timeValue: 0
+					};
+				},
+				updateTime: function updateTime() {
+					this.setState({ timeValue: this.state.timeValue + 1});
+				},
+				componentDidMount: function componentDidMount() {
+					this.interval = setInterval(this.updateTime,1000);
+				},
+				componentWillUnmount: function componentWillUnmount() {
+					clearInterval(this.interval);
+				},	
+				render: function render() {
+					return React.createElement("span",null,"Number of seconds elapsed : ", this.state.timeValue);
+				}
+			});
+			ReactDOM.render(React.createElement(MyComponent2,{}), document.getElementById('timerDiv'));
+		})();
+	</script>
+	
+	<br>
+	<div id='tableDiv' style='border:1px solid grey;'></div>	
+	<script type='text/javascript'>
+	
+		(function(){
+			var rowComponent = React.createClass({
+				displayName: 'rowComponent',
+				render: function render() {
+					return React.createElement(
+						"tr",
+						{key:(this.props.rowNumber+1)},
+						React.createElement("td",null,"Row number : "+this.props.rowNumber)
+					);
+				}
+			});
+			
+			var tableComponent = React.createClass({
+				displayName: 'tableComponent',
+				render: function render() {
+					return React.createElement(
+						'table',
+						{key:this.props.rowNumber.length},
+						React.createElement(
+							"tbody",
+							null,
+							this.props.rowNumber.map(function(currentValue,index,arr) {
+								return React.createElement(rowComponent,{key:(index+1),rowNumber:(index+1)});
+								//return React.createElement(
+									//"tr",
+									//{key: index+1},
+									//React.createElement(
+									//	"td",
+									//	null,
+									//	"Row number : ",
+									//	(index+1)									
+									//)
+								//)
+							})
+						)
+					);
+				}
+			});
+			
+			var tableDivComponent = React.createClass({
+				displayName: 'tableDivComponent',
+				getInitialState: function getInitialState() {
+					return {
+						rowNumber: [],
+						indexNum: 0
+					};
+				},
+				addRows: function addRows() {
+					this.setState({indexNum: this.state.indexNum+1, rowNumber: this.state.rowNumber.concat([this.state.indexNum+1])});
+				},
+				render: function render() {
+					return React.createElement(
+						"div",
+						null,
+						React.createElement(tableComponent,{rowNumber: this.state.rowNumber}),
+						React.createElement('button',{onClick: this.addRows},"Add Table Row #"+(this.state.rowNumber.length+1))					
+					);
+				}
+			});
+			
+			ReactDOM.render(React.createElement(tableDivComponent,null), document.getElementById('tableDiv'));		
+		})();
+		
+	</script>
+	
+	<br>
+	<br>
+	<div id="listingDiv" style='height:150px;'></div>
+	<script type='text/javascript'>	
+		(function() {
+			var testData = [
+				{'id': 'id_1'},
+				{'id': 'id_2'},
+				{'id': 'id_3'},
+				{'id': 'id_4'},
+				{'id': 'id_5'},
+				{'id': 'id_6'},
+				{'id': 'id_7'},
+				{'id': 'id_8'},
+				{'id': 'id_9'},
+				{'id': 'id_10'}
+			];
+			// Container for search and list data
+				//	inputbox for searching
+				//	listing filtered data		
+
+			var searchInput = React.createClass({
+				displayName: 'searchInput',
+				render: function render() {
+					return React.createElement(
+						"input",
+						{type:'text',id:'id1',className:'class1',onInput:this.props.filterFn, value:this.props.searchText}					
+					);
+				}
+			});		
+				
+			var listingOutput = React.createClass({
+				displayName: 'listingOutput',
+				render: function render() {
+					var searchText = this.props.searchText,
+						listData = this.props.data;
+					return React.createElement(
+						"ul",
+						null,
+						listData.map(function(currVal,index,arr){
+							if(currVal.id.toString().match(new RegExp(searchText,'gim'))!==null) {
+								return React.createElement(
+									"li",
+									{key:index+1},
+									currVal.id
+								);
+							}
+						})
+					);
+				}
+			});	
+				
+			var containerBox = React.createClass({
+				displayName: 'containerBox',
+				getInitialState: function() {
+					return {
+						searchText: ''
+					};
+				},
+				filterList: function(evt) {
+					this.setState({searchText:evt.target.value});
+				},
+				//componentDidMount: function componentDidMount() {},
+				render: function render() {
+					return React.createElement(
+						"form",
+						null,
+						React.createElement(searchInput,{filterFn:this.filterList, searchText:this.state.searchText}),
+						React.createElement(listingOutput,{data:this.props.listData, searchText:this.state.searchText})
+					);
+				}
+			});
+
+			var list1 = ReactDOM.render(React.createElement(containerBox,{listData:testData}),document.getElementById("listingDiv"));		
+			var list2 = ReactDOM.render(React.createElement(containerBox,{listData:testData}),document.getElementById("listingDiv"));		
+			//alert(list1===list2);
+			
+		})();
+		
+	</script>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	
+	<!-- <div id="listingDiv1" style='height:150px;' ng-app>
+		<input ng-model='searchInput1' value='1'>
+		<ul ng-init="testData=[{'id': 'id_1'},{'id': 'id_2'},{'id': 'id_3'},{'id': 'id_4'},{'id': 'id_5'},{'id': 'id_6'},{'id': 'id_7'},{'id': 'id_8'},{'id': 'id_9'},{'id': 'id_10'}]">
+			<li ng-repeat="d in testData | filter:searchInput1">
+				{{d.id}}
+			</li>
+		</ul>
+	</div> -->	
+		
+	<div id='timerTest1' style='height:150px;position:relative;'></div>
+	
+	<script type='text/javascript'>
+	
+		(function(){
+			var HelloWorld = React.createClass({
+				displayName: 'HelloWorld',
+				render: function render() {
+					return React.createElement(
+						"form",
+						null,
+						React.createElement("input",{type:'text',placeholder:'name'}),
+						React.createElement("input",{type:'text',placeholder:'name'}),
+						"text111",
+						React.createElement("input",{type:'text',placeholder:'name'}),
+						"text222",
+						React.createElement("input",{type:'text',placeholder:'name'}),
+						"text333",
+						React.createElement("p",null,"Time is now : ",this.props.date.toTimeString()),
+						React.DOM.br(null),
+						React.DOM.br(null),
+						React.DOM.br(null),
+						React.DOM.br(null),
+						React.DOM.h4({id:'h4_element'},'header text-1',React.DOM.p(null,'Paragraph'))
+					);
+				}
+			});
+			
+			setInterval(function() {
+				ReactDOM.render(React.createElement(HelloWorld,{date:new Date()}),document.getElementById('timerTest1'));
+			},1000);			
+		})();
+		
+	</script>
+		
+	<div id='testForm' style='height:150px;position:relative;'></div>
+	<script type='text/javascript'>
+	
+		var MyFormComponent_Label = React.createClass({
+			render: function() {
+				return React.createElement('label',null,'LABEL: ')
+			}
+		}); 
+
+		var MyFormComponent_Input = React.createClass({
+			render: function() {
+				return React.createElement('input',{type:'text',disabled:false})
+			}
+		}); 
+		
+		var MyFormComponent_Row = React.createClass({
+			render: function() {
+				return React.createElement(
+					'div',
+					null,
+					React.createElement(MyFormComponent_Label),
+					React.createElement(MyFormComponent_Input)					
+				)
+			}
+		}); 
+
+		var MyFormComponent = React.createClass({
+			render: function render() {
+				return React.createElement(
+					'form',
+					null,
+					React.createElement(MyFormComponent_Row)
+				)
+			}
+		});
+		
+		ReactDOM.render(React.createElement(MyFormComponent), document.getElementById('testForm'));
+		
+	</script>
+	
+	
+	<div id='testPropTypes'></div>
+	<script type='text/javascript'>
+		var testPropComponent = React.createClass({
+			//propTypes: {
+				//children: React.PropTypes.element.isRequired
+			//},
+			getDefaultProps: function() {
+				return {
+					prop1: 'default property'
+				};
+			},
+			render: function() {
+				return React.createElement(
+					'div',
+					null,
+					'test123 ',
+					this.props.prop1					
+				);
+			}
+		});		
+		ReactDOM.render(React.createElement(testPropComponent,{prop1:'dynamic value'}), document.getElementById('testPropTypes'));
+		
+	</script>
+	
+	<div id='testForm1'></div>
+	
+	
+	<dl>
+		<dt>Type1</dt>
+		<dd>- description1</dd>
+		<dt>Type2</dt>
+		<dd>- description2</dd>
+	</dl>
+	
+	<ul>
+		<li>1</li>
+		<li>2
+			<ul>
+				<li>2.1</li>
+				<li>2.2</li>
+			</ul>
+		</li>
+		<li>1</li>
+	</ul>	
+	
+	<test>test element1</test><h1>header</h1><test>test element2</test>
+	
+</body>
+</html>
